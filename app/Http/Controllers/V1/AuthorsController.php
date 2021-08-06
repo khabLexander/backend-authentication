@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\V1;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Author;
 use App\Models\Project;
-use Illuminate\Http\Request;
 
 
 class AuthorsController extends Controller

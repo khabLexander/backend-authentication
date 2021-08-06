@@ -61,16 +61,16 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         $version = 'v1';
-        Route::prefix('api/' . $version.'/public')
+        Route::prefix('api/' . $version)
             ->middleware('api')
-            ->group(base_path('routes/api/public.php'));
+            ->group(base_path("routes/api/${version}/public.php"));
 
-        Route::prefix('api/' . $version.'/private')
+        Route::prefix('api/' . $version)
             ->middleware('api')
-            ->group(base_path('routes/api/private.php'));
+            ->group(base_path("routes/api/${version}/private.php"));
 
-        Route::prefix('api/' . $version.'/authentication')
+        Route::prefix('api/' . $version)
             ->middleware('api')
-            ->group(base_path('routes/api/authentication.php'));
+            ->group(base_path("routes/api/${version}/authentication.php"));
     }
 }

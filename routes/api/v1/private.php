@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\ProjectsController;
-use App\Http\Controllers\AuthorsController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\V1\ProjectsController;
+use App\Http\Controllers\V1\AuthorsController;
 
 /*
 |--------------------------------------------------------------------------
