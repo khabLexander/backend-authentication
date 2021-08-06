@@ -4,7 +4,7 @@ namespace App\Http\Requests\V1\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyUserRequest extends FormRequest
+class DestroysUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

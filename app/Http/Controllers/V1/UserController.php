@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\V1\Users\DestroyUserRequest;
+use App\Http\Requests\V1\Users\DestroysUserRequest;
 use App\Http\Requests\V1\Users\StoreUserRequest;
 use App\Http\Requests\V1\Users\UpdateUserRequest;
 use App\Http\Resources\V1\Users\UserCollection;
@@ -116,7 +116,7 @@ class UserController extends Controller
         );
     }
 
-    public function destroys(DestroyUserRequest $request)
+    public function destroys(DestroysUserRequest $request)
     {
         User::destroy($request->input('ids'));
 

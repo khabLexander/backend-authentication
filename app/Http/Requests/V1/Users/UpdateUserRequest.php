@@ -24,7 +24,7 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => ['required', 'unique:pgsql-authentication.users,username', 'max:50'],
+            'username' => ['required', 'max:50'],
             'name' => ['required', 'min:2', 'max:100'],
             'lastname' => ['required', 'min:2', 'max:50'],
             'email' => ['required', 'max:50'],
