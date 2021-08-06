@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -175,6 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+        Laraveles\Spanish\SpanishServiceProvider::class,
     ],
 
     /*
@@ -228,6 +230,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

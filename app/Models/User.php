@@ -6,14 +6,21 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as Auditing;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Auditable, MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Auditing;
+    use Notifiable;
+    use HasApiTokens;
     use SoftDeletes;
 
+    const ATTEMPTS = 3;
     /**
      * The attributes that are mass assignable.
      *
@@ -44,7 +51,25 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    function setPasswordAttribute($value){
+    public function setPasswordAttribute($value)
+    {
         $this->attributes['password'] = Hash::make($value);
     }
+
+
+    // Scopes
+    public function scopeName($query, $value)
+    {
+        if ($value) {
+            return $query->where('name', 'ILIKE', "%$value%");
+        }
+    }
+
+    public function scopeLastname($query, $value)
+    {
+        if ($value) {
+            return $query->where('lastname', 'ILIKE', "%$value%");
+        }
+    }
+
 }

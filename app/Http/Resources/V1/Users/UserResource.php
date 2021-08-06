@@ -16,7 +16,7 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'names' => $this->name,
+            'name' => $this->name,
             'lastname' => $this->lastname,
             'avatar' => $this->avatar,
             'username' => $this->username,
@@ -26,4 +26,14 @@ class UserResource extends JsonResource
             'password_changed' => $this->password_changed,
         ];
     }
+
+//    public function with($request)
+//    {
+//        return [
+//            'message' => [
+//                'summary' => '',
+//                'detail' => ''
+//            ]
+//        ];
+//    }
 }

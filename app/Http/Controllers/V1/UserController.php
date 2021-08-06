@@ -18,21 +18,36 @@ class UserController extends Controller
      *
      * @return UserCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new UserCollection(User::paginate());
+        if ($request->has('search')) {
+            $users = User::name($request->input('search'))
+                ->paginate($request->input('per_page'));
+        } else {
+            $users = User::paginate($request->input('per_page'));
+        }
+
+        return (new UserCollection($users))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return UserResource
      */
     public function store(StoreUserRequest $request)
     {
         $user = new User();
         $user->username = $request->input('username');
+        $user->password = $request->input('password');
         $user->name = $request->input('name');
         $user->lastname = $request->input('lastname');
         $user->avatar = $request->input('avatar');
@@ -40,16 +55,15 @@ class UserController extends Controller
         $user->email = $request->input('email');
         $user->save();
 
-        return response()->json(
-            [
-                'data' => $user,
+        return (new UserResource($user))
+            ->additional([
                 'msg' => [
-                    'summary' => 'Usuario creado',
+                    'summary' => 'Usuario Modificado',
                     'detail' => '',
-                    'code' => '201'
+                    'code' => '200'
                 ]
-            ], 201
-        );
+            ]);
+
     }
 
     /**
@@ -60,7 +74,15 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return new UserResource($user);
+        $user = $user->with('phones');
+        return (new UserResource($user))
+            ->additional([
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
+            ]);;
     }
 
     /**
@@ -68,7 +90,7 @@ class UserController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\User $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return UserResource
      */
     public function update(UpdateUserRequest $request, User $user)
     {
@@ -76,59 +98,51 @@ class UserController extends Controller
         $user->name = $request->input('name');
         $user->lastname = $request->input('lastname');
         $user->avatar = $request->input('avatar');
-        $user->username = $request->input('username');
         $user->birthdate = $request->input('birthdate');
         $user->email = $request->input('email');
-        $user->email_verified_at = $request->input('email_verified_at');
-        $user->password_changed = $request->input('password_changed');
         $user->save();
-        return response()->json(
-            [
-                'data' => $user,
+
+        return (new UserResource($user))
+            ->additional([
                 'msg' => [
                     'summary' => 'Usuario Modificado',
                     'detail' => '',
-                    'code' => '201'
+                    'code' => '200'
                 ]
-            ], 201
-        );
+            ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\User $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return UserResource
      */
     public function destroy(User $user)
     {
         $user->delete();
-
-        return response()->json(
-            [
-                'data' => $user,
+        return (new UserResource($user))
+            ->additional([
                 'msg' => [
                     'summary' => 'Usuario Eliminado',
                     'detail' => '',
-                    'code' => '201'
+                    'code' => '200'
                 ]
-            ], 201
-        );
+            ]);
     }
 
     public function destroys(DestroysUserRequest $request)
     {
+        $users = User::whereIn('id', $request->input('ids'))->get();
         User::destroy($request->input('ids'));
 
-        return response()->json(
-            [
-                'data' => null,
+        return (new UserResource($users))
+            ->additional([
                 'msg' => [
-                    'summary' => 'Usuario/s Eliminado/s',
+                    'summary' => 'Usuarios Eliminados',
                     'detail' => '',
                     'code' => '201'
                 ]
-            ], 201
-        );
+            ]);
     }
 }

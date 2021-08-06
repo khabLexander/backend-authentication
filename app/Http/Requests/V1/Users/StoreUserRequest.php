@@ -24,10 +24,11 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => ['required', 'max:1'],
+            'username' => ['required', 'max:100'],
             'name' => ['required', 'min:2', 'max:100'],
             'lastname' => ['required', 'min:2', 'max:50'],
-            'email' => ['required', 'max:50','email'],
+            'email' => ['required', 'max:50', 'email'],
+            'password' => ['required', 'min:6', 'max:16', 'confirmed'],
         ];
     }
 
@@ -37,7 +38,8 @@ class StoreUserRequest extends FormRequest
             'username' => 'nombre de usuario',
             'name' => 'nombre',
             'lastname' => 'apellido',
-            'email' => 'correo electrónico'
+            'email' => 'correo electrónico',
+            'password' => 'contraseña',
         ];
     }
 }

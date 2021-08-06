@@ -18,13 +18,23 @@ class AuthenticationSeeder extends Seeder
     {
         $this->createUsers();
         $this->createLocationCatalogues();
+        $this->createIdentificationTypeCatalogues();
+        $this->createSexCatalogues();
+        $this->createGenderCatalogues();
+        $this->createBloodTypeCatalogues();
+        $this->createEthnicOriginCatalogues();
+        $this->createSectorTypeCatalogues();
+        $this->createTelephoneOperatorCatalogues();
+
         $this->createLocations();
     }
 
-    function createUsers()
+    private function createUsers()
     {
+        User::factory()->create(['username' => '1234567890']);
         User::factory(10)->create();
     }
+
     private function createLocationCatalogues()
     {
         $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
@@ -552,5 +562,195 @@ class AuthenticationSeeder extends Seeder
         DB::select("insert into authentication.locations(type_id,parent_id,code,name) values(3,273,'9002','MANGA DEL CURA');");
         DB::select("insert into authentication.locations(type_id,parent_id,code,name) values(3,273,'9003','EL PIEDRERO');");
 
+    }
+
+    private function createIdentificationTypeCatalogues()
+    {
+        Catalogue::factory(3)->sequence(
+            ['name' => 'CEDULA',],
+            ['name' => 'PASAPORTE',],
+            ['name' => 'RUC',],
+        );
+    }
+
+    private function createSexCatalogues()
+    {
+        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
+        Catalogue::factory(2)->sequence(
+            [
+                'code' => $catalogues['catalogue']['sex']['male'],
+                'name' => 'HOMBRE',
+                'type' => $catalogues['catalogue']['sex']['type']
+            ],
+            [
+                'code' => $catalogues['catalogue']['sex']['female'],
+                'name' => 'MUJER',
+                'type' => $catalogues['catalogue']['sex']['type'],
+            ]
+        )->create();
+    }
+
+    private function createGenderCatalogues()
+    {
+        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
+        Catalogue::factory(4)->sequence(
+            [
+                'code' => $catalogues['catalogue']['gender']['male'],
+                'name' => 'MASCULINO',
+                'type' => $catalogues['catalogue']['gender']['type']
+            ],
+            [
+                'code' => $catalogues['catalogue']['gender']['female'],
+                'name' => 'FEMENINO',
+                'type' => $catalogues['catalogue']['gender']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['gender']['other'],
+                'name' => 'OTRO',
+                'type' => $catalogues['catalogue']['gender']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['gender']['not_say'],
+                'name' => 'PREFIERO NO DECIRLO',
+                'type' => $catalogues['catalogue']['gender']['type'],
+            ],
+        )->create();
+    }
+
+    private function createSectorTypeCatalogues()
+    {
+        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
+        Catalogue::factory(3)->sequence(
+            [
+                'name' => 'NORTE',
+                'type' => $catalogues['catalogue']['sector']['type'],
+            ],
+            [
+                'name' => 'CENTRO',
+                'type' => $catalogues['catalogue']['sector']['type'],
+            ],
+            [
+                'name' => 'SUR',
+                'type' => $catalogues['catalogue']['sector']['type'],
+            ],
+        )->create();
+    }
+
+    private function createEthnicOriginCatalogues()
+    {
+        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
+        Catalogue::factory(9)->sequence(
+            [
+                'code' => $catalogues['catalogue']['ethnic_origin']['indigena'],
+                'name' => 'INDIGENA',
+                'type' => $catalogues['catalogue']['ethnic_origin']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['ethnic_origin']['afroecuatoriano'],
+                'name' => 'AFROECUATORIANO',
+                'type' => $catalogues['catalogue']['ethnic_origin']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['ethnic_origin']['negro'],
+                'name' => 'NEGRO',
+                'type' => $catalogues['catalogue']['ethnic_origin']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['ethnic_origin']['mulato'],
+                'name' => 'MULATO',
+                'type' => $catalogues['catalogue']['ethnic_origin']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['ethnic_origin']['montuvio'],
+                'name' => 'MONTUVIO',
+                'type' => $catalogues['catalogue']['ethnic_origin']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['ethnic_origin']['mestizo'],
+                'name' => 'MESTIZO',
+                'type' => $catalogues['catalogue']['ethnic_origin']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['ethnic_origin']['blanco'],
+                'name' => 'BLANCO',
+                'type' => $catalogues['catalogue']['ethnic_origin']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['ethnic_origin']['other'],
+                'name' => 'OTRO',
+                'type' => $catalogues['catalogue']['ethnic_origin']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['ethnic_origin']['unregistered'],
+                'name' => 'NO REGISTRA',
+                'type' => $catalogues['catalogue']['ethnic_origin']['type'],
+            ]
+        )->create();
+    }
+
+    private function createBloodTypeCatalogues()
+    {
+        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
+        Catalogue::factory(8)->sequence(
+            [
+                'code' => $catalogues['catalogue']['blood_type']['a-'],
+                'name' => 'A-',
+                'type' => $catalogues['catalogue']['blood_type']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['blood_type']['a+'],
+                'name' => 'A+',
+                'type' => $catalogues['catalogue']['blood_type']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['blood_type']['b-'],
+                'name' => 'B-',
+                'type' => $catalogues['catalogue']['blood_type']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['blood_type']['b+'],
+                'name' => 'B+',
+                'type' => $catalogues['catalogue']['blood_type']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['blood_type']['ab-'],
+                'name' => 'AB-',
+                'type' => $catalogues['catalogue']['blood_type']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['blood_type']['ab+'],
+                'name' => 'AB+',
+                'type' => $catalogues['catalogue']['blood_type']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['blood_type']['o-'],
+                'name' => 'O-',
+                'type' => $catalogues['catalogue']['blood_type']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['blood_type']['o+'],
+                'name' => 'O+',
+                'type' => $catalogues['catalogue']['blood_type']['type'],
+            ],
+        )->create();
+    }
+
+    private function createTelephoneOperatorCatalogues()
+    {
+        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
+        Catalogue::factory(3)->sequence(
+            [
+                'name' => 'CLARO',
+                'type' => $catalogues['catalogue']['telephone_operator']['type'],
+            ],
+            [
+                'name' => 'CNT',
+                'type' => $catalogues['catalogue']['telephone_operator']['type'],
+            ],
+            [
+                'name' => 'MOVISTAR',
+                'type' => $catalogues['catalogue']['telephone_operator']['type'],
+            ],
+        )->create();
     }
 }

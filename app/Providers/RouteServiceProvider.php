@@ -66,11 +66,11 @@ class RouteServiceProvider extends ServiceProvider
             ->group(base_path("routes/api/${version}/public.php"));
 
         Route::prefix("api/${version}")
-            ->middleware('api')
+            ->middleware(['api', 'auth:sanctum'])
             ->group(base_path("routes/api/${version}/private.php"));
 
         Route::prefix("api/${version}")
-            ->middleware('api')
+            ->middleware(['api', 'auth:sanctum'])
             ->group(base_path("routes/api/${version}/authentication.php"));
     }
 }

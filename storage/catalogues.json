@@ -247,6 +247,9 @@
         },
         "offer_training_hours": {
             "type": "OFFER_TRAINING_HOURS"
+        },
+        "telephone_operator": {
+            "type": "TELEPHONE_OPERATOR"
         }
     }
 }

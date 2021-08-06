@@ -18,6 +18,9 @@ class CreateAuthenticationUsersTable extends Migration
             $table->foreignId('identification_type_id')->nullable()->constrained('authentication.catalogues');
             $table->foreignId('sex_id')->nullable()->constrained('authentication.catalogues');
             $table->foreignId('gender_id')->nullable()->constrained('authentication.catalogues');
+            $table->foreignId('ethnic_origin_id')->nullable() ->constrained('authentication.catalogues');
+            $table->foreignId('blood_type_id')->nullable()->constrained('authentication.catalogues');
+            $table->foreignId('civil_status_id') ->nullable()->constrained('authentication.catalogues');
             $table->string('avatar')->nullable()->unique();
             $table->string('username')->unique();
             $table->string('name');
@@ -27,6 +30,7 @@ class CreateAuthenticationUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('password_changed')->default(false);
+            $table->integer('attempts')->default(\App\Models\User::ATTEMPTS);
             $table->rememberToken();
             $table->softDeletes();
             $table->timestamps();
