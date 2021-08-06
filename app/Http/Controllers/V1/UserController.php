@@ -36,11 +36,8 @@ class UserController extends Controller
         $user->name = $request->input('name');
         $user->lastname = $request->input('lastname');
         $user->avatar = $request->input('avatar');
-        $user->username = $request->input('username');
         $user->birthdate = $request->input('birthdate');
         $user->email = $request->input('email');
-        $user->email_verified_at = $request->input('email_verified_at');
-        $user->password_changed = $request->input('password_changed');
         $user->save();
 
         return response()->json(
@@ -103,7 +100,7 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(User $user)
+    public function destroy(User $user)
     {
         $user->delete();
 
@@ -119,7 +116,7 @@ class UserController extends Controller
         );
     }
 
-    public function destroy(DestroyUserRequest $request)
+    public function destroys(DestroyUserRequest $request)
     {
         User::destroy($request->input('ids'));
 

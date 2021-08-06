@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\V1\ProjectsController;
-use App\Http\Controllers\V1\AuthorsController;
 
 /*
 |--------------------------------------------------------------------------
