@@ -16,7 +16,7 @@ class CreateAuthenticationEmailsTable extends Migration
         Schema::connection(env('DB_CONNECTION'))->create('emails', function (Blueprint $table) {
             $table->id();
             $table->morphs('emailable');
-            $table->string('name');
+            $table->string('email');
             $table->boolean('main');
             $table->softDeletes();
             $table->timestamps();

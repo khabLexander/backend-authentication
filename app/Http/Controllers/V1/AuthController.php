@@ -18,12 +18,20 @@ class AuthController extends Controller
         $user = User::firstWhere('username', '=', $request->username);
         if (!$user) {
             return response()->json([
-                'message' => 'Usuario no encotrado'
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
             ], 404);
         }
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
-                'message' => 'Contraseña incorrecta'
+                'msg' => [
+                    'summary' => 'success',
+                    'detail' => '',
+                    'code' => '200'
+                ]
             ], 401);
         }
 

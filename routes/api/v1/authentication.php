@@ -11,6 +11,7 @@ Route::apiResource('users', UserController::class);
 
 Route::prefix('user')->group(function () {
     Route::patch('destroys', [UserController::class, 'destroys']);
+    Route::get('filter', [UserController::class, 'filter']);
 });
 
 Route::prefix('auth')->group(function () {

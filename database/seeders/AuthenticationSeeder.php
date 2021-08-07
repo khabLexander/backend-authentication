@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Catalogue;
+use App\Models\Phone;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -32,7 +33,9 @@ class AuthenticationSeeder extends Seeder
     private function createUsers()
     {
         User::factory()->create(['username' => '1234567890']);
-        User::factory(10)->create();
+        for ($i = 1; $i <= 10; $i++) {
+            Phone::factory(2)->for(User::factory(), 'phoneable')->create();
+        }
     }
 
     private function createLocationCatalogues()

@@ -51,6 +51,12 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
+    // Relationships
+    public function phones()
+    {
+        return $this->morphMany(Phone::class,'phoneable');
+    }
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
@@ -58,18 +64,40 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
 
 
     // Scopes
-    public function scopeName($query, $value)
+    public function scopeName($query, $name)
     {
-        if ($value) {
-            return $query->where('name', 'ILIKE', "%$value%");
+        if ($name) {
+            return $query->orWhere('name', 'ILIKE', "%$name%");
         }
     }
 
-    public function scopeLastname($query, $value)
+    public function scopeLastname($query, $lastname)
     {
-        if ($value) {
-            return $query->where('lastname', 'ILIKE', "%$value%");
+        if ($lastname) {
+            return $query->orWhere('lastname', 'ILIKE', "%$lastname%");
         }
     }
+
+    public function scopeCustomOrderBy($query, $sorts)
+    {
+        if (!empty($sorts[0])) {
+            foreach ($sorts as $sort) {
+                $field = explode('-', $sort);
+                if (empty($field[0]) && in_array($field[1], $this->fillable)) {
+                    $query = $query->orderByDesc($field[1]);
+                } else if (in_array($field[0], $this->fillable)) {
+                    $query = $query->orderBy($field[0]);
+                }
+            }
+            return $query;
+        }
+    }
+
+//    public function scopeSearch($query, $request)
+//    {
+//        if ($fiel['name']) {
+//            return $query->where('name', 'ILIKE', "%2%");
+//        }
+//    }
 
 }

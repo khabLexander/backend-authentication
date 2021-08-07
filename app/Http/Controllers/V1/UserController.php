@@ -20,13 +20,17 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->has('search')) {
-            $users = User::name($request->input('search'))
+        $sorts = explode(',', $request->sort);
+
+        if ($request->has('page') && $request->has('per_page')) {
+            $users = User::customOrderBy($sorts)
                 ->paginate($request->input('per_page'));
         } else {
-            $users = User::paginate($request->input('per_page'));
+            $users = User::customOrderBy($sorts)
+                ->name($request->input('name'))
+                ->lastname($request->input('lastname'))
+                ->paginate();
         }
-
         return (new UserCollection($users))
             ->additional([
                 'msg' => [
