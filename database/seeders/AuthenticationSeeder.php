@@ -3,10 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\Catalogue;
+use App\Models\Email;
 use App\Models\Phone;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AuthenticationSeeder extends Seeder
 {
@@ -17,25 +20,91 @@ class AuthenticationSeeder extends Seeder
      */
     public function run()
     {
-        $this->createUsers();
         $this->createLocationCatalogues();
         $this->createIdentificationTypeCatalogues();
         $this->createSexCatalogues();
         $this->createGenderCatalogues();
         $this->createBloodTypeCatalogues();
         $this->createEthnicOriginCatalogues();
+        $this->createCivilStatusCatalogues();
         $this->createSectorTypeCatalogues();
         $this->createTelephoneOperatorCatalogues();
 
         $this->createLocations();
+
+        $this->createUsers();
+        $this->createRoles();
+        $this->createPermissions();
+        $this->assignRolePermissions();
+        $this->assignUserRoles();
+
     }
 
     private function createUsers()
     {
-        User::factory()->create(['username' => '1234567890']);
+        $identificationTypes = Catalogue::where('type', 'IDENTIFICATION_TYPE')->get();
+        $sexs = Catalogue::where('type', 'SEX_TYPE')->get();
+        $genders = Catalogue::where('type', 'GENDER_TYPE')->get();
+        $ethnicOrigin = Catalogue::where('type', 'ETHNIC_ORIGIN_TYPE')->get();
+        $bloodType = Catalogue::where('type', 'BLOOD_TYPE')->get();
+        $civilStatus = Catalogue::where('type', 'CIVIL_STATUS')->get();
+        $operators = Catalogue::where('type', 'TELEPHONE_OPERATOR')->get();
+        $userFactory = User::factory()->create(
+            [
+                'username' => '1234567890',
+                'identification_type_id' => $identificationTypes[rand(0, $identificationTypes->count() - 1)],
+                'sex_id' => $sexs[rand(0, $sexs->count() - 1)],
+                'gender_id' => $genders[rand(0, $genders->count() - 1)],
+                'ethnic_origin_id' => $ethnicOrigin[rand(0, $ethnicOrigin->count() - 1)],
+                'blood_type_id' => $bloodType[rand(0, $bloodType->count() - 1)],
+                'civil_status_id' => $civilStatus[rand(0, $civilStatus->count() - 1)],
+            ]
+        );
+        Phone::factory(2)->for($userFactory, 'phoneable')
+            ->create(
+                ['operator_id' => $operators[rand(0, $operators->count() - 1)]]
+            );
+        Email::factory(2)->for($userFactory, 'emailable')->create();
         for ($i = 1; $i <= 10; $i++) {
-            Phone::factory(2)->for(User::factory(), 'phoneable')->create();
+            $userFactory = User::factory()
+                ->create([
+                    'identification_type_id' => $identificationTypes[rand(0, $identificationTypes->count() - 1)],
+                    'sex_id' => $sexs[rand(0, $sexs->count() - 1)],
+                    'gender_id' => $genders[rand(0, $genders->count() - 1)],
+                    'ethnic_origin_id' => $ethnicOrigin[rand(0, $ethnicOrigin->count() - 1)],
+                    'blood_type_id' => $bloodType[rand(0, $bloodType->count() - 1)],
+                    'civil_status_id' => $civilStatus[rand(0, $civilStatus->count() - 1)],
+                ]);
+            Phone::factory(2)->for($userFactory, 'phoneable')
+                ->create(['operator_id' => $operators[rand(0, $operators->count() - 1)]]);
+            Email::factory(2)->for($userFactory, 'emailable')->create();
         }
+    }
+
+    private function createRoles()
+    {
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'guest']);
+    }
+
+    private function createPermissions()
+    {
+        Permission::create(['name' => 'view users']);
+        Permission::create(['name' => 'store users']);
+        Permission::create(['name' => 'update users']);
+        Permission::create(['name' => 'delete users']);
+    }
+
+    private function assignRolePermissions()
+    {
+        $role = Role::firstWhere('name', 'admin');
+        $role->syncPermissions(Permission::get());
+    }
+
+    private function assignUserRoles()
+    {
+        $user = User::find(1);
+        $user->assignRole('admin');
     }
 
     private function createLocationCatalogues()
@@ -569,11 +638,20 @@ class AuthenticationSeeder extends Seeder
 
     private function createIdentificationTypeCatalogues()
     {
+        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
         Catalogue::factory(3)->sequence(
-            ['name' => 'CEDULA',],
-            ['name' => 'PASAPORTE',],
-            ['name' => 'RUC',],
-        );
+            [
+                'code' => $catalogues['catalogue']['identification_type']['cc'],
+                'name' => 'CEDULA',
+                'type' => $catalogues['catalogue']['identification_type']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['identification_type']['passport'],
+                'name' => 'PASAPORTE', 'type' => $catalogues['catalogue']['identification_type']['type']],
+            [
+                'code' => $catalogues['catalogue']['identification_type']['ruc'],
+                'name' => 'RUC', 'type' => $catalogues['catalogue']['identification_type']['type']],
+        )->create();
     }
 
     private function createSexCatalogues()
@@ -734,6 +812,38 @@ class AuthenticationSeeder extends Seeder
                 'code' => $catalogues['catalogue']['blood_type']['o+'],
                 'name' => 'O+',
                 'type' => $catalogues['catalogue']['blood_type']['type'],
+            ],
+        )->create();
+    }
+
+    private function createCivilStatusCatalogues()
+    {
+        $catalogues = json_decode(file_get_contents(storage_path() . "/catalogues.json"), true);
+        Catalogue::factory(8)->sequence(
+            [
+                'code' => $catalogues['catalogue']['civil_status']['married'],
+                'name' => 'CASADO/A',
+                'type' => $catalogues['catalogue']['civil_status']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['civil_status']['single'],
+                'name' => 'SOLTERO/A',
+                'type' => $catalogues['catalogue']['civil_status']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['civil_status']['divorced'],
+                'name' => 'DIVORCIADO/A',
+                'type' => $catalogues['catalogue']['civil_status']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['civil_status']['widower'],
+                'name' => 'VIUDO/A',
+                'type' => $catalogues['catalogue']['civil_status']['type'],
+            ],
+            [
+                'code' => $catalogues['catalogue']['civil_status']['union'],
+                'name' => 'UNION DE HECHO',
+                'type' => $catalogues['catalogue']['civil_status']['type'],
             ],
         )->create();
     }

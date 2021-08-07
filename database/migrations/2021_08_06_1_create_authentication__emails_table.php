@@ -17,7 +17,6 @@ class CreateAuthenticationEmailsTable extends Migration
             $table->id();
             $table->morphs('emailable');
             $table->string('email');
-            $table->boolean('main');
             $table->softDeletes();
             $table->timestamps();
         });

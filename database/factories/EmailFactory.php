@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\Phone;
+use App\Models\Email;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PhoneFactory extends Factory
+class EmailFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Phone::class;
+    protected $model = Email::class;
 
     /**
      * Define the model's default state.
@@ -22,7 +22,7 @@ class PhoneFactory extends Factory
     public function definition()
     {
         return [
-           'number'=>$this->faker->phoneNumber(),
+            'email'=>$this->faker->safeEmail(),
         ];
     }
 }

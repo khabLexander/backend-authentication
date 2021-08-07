@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\V1\Users;
 
+use App\Http\Resources\V1\Catalogues\CatalogueResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -16,12 +17,21 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'lastname' => $this->lastname,
             'avatar' => $this->avatar,
             'username' => $this->username,
-            'birthdate' => $this->birthdate,
+            'name' => $this->name,
+            'lastname' => $this->lastname,
             'email' => $this->email,
+            'cellphone' => $this->cellphone,
+            'birthdate' => $this->birthdate,
+            'emails' => EmailResource::collection($this->emails),
+            'phones' => PhoneResource::collection($this->phones),
+            'identificationType' => CatalogueResource::make($this->identificationType),
+            'sex' => CatalogueResource::make($this->sex),
+            'gender' => CatalogueResource::make($this->gender),
+            'bloodType' => CatalogueResource::make($this->bloodType),
+            'ethnicOrigin' => CatalogueResource::make($this->ethnicOrigin),
+            'civilStatus' => CatalogueResource::make($this->civilStatus),
             'email_verified_at' => $this->email_verified_at,
             'password_changed' => $this->password_changed,
         ];

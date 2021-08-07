@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as Auditing;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements Auditable, MustVerifyEmail
 {
@@ -19,6 +20,7 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
     use Notifiable;
     use HasApiTokens;
     use SoftDeletes;
+    use HasRoles;
 
     const ATTEMPTS = 3;
     /**
@@ -27,9 +29,14 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
      * @var array
      */
     protected $fillable = [
+        'avatar',
+        'username',
+        'birthdate',
         'name',
+        'lastname',
         'email',
-        'password',
+        'email_verified_at',
+        'password_changed',
     ];
 
     /**
@@ -54,7 +61,42 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
     // Relationships
     public function phones()
     {
-        return $this->morphMany(Phone::class,'phoneable');
+        return $this->morphMany(Phone::class, 'phoneable');
+    }
+
+    public function emails()
+    {
+        return $this->morphMany(Email::class, 'emailable');
+    }
+
+    public function identificationType()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
+
+    public function sex()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
+
+    public function gender()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
+
+    public function bloodType()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
+
+    public function ethnicOrigin()
+    {
+        return $this->belongsTo(Catalogue::class);
+    }
+
+    public function civilStatus()
+    {
+        return $this->belongsTo(Catalogue::class);
     }
 
     public function setPasswordAttribute($value)
@@ -64,6 +106,13 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
 
 
     // Scopes
+    public function scopeUsername($query, $username)
+    {
+        if ($username) {
+            return $query->orWhere('username', 'ILIKE', "%$username%");
+        }
+    }
+
     public function scopeName($query, $name)
     {
         if ($name) {
@@ -92,12 +141,4 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
             return $query;
         }
     }
-
-//    public function scopeSearch($query, $request)
-//    {
-//        if ($fiel['name']) {
-//            return $query->where('name', 'ILIKE', "%2%");
-//        }
-//    }
-
 }

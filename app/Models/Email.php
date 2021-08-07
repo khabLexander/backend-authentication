@@ -5,24 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Phone extends Model
+class Email extends Model
 {
     use HasFactory;
 
-    protected $table = 'authentication.phones';
+    protected $table = 'authentication.emails';
 
     protected $fillable = [
-        'number',
+        'email',
         'main',
     ];
 
-    public function phoneable()
+    public function emailable()
     {
         return $this->morphTo();
-    }
-
-    public function operator()
-    {
-        return $this->belongsTo(Catalogue::class);
     }
 }

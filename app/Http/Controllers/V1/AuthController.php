@@ -5,26 +5,35 @@ namespace App\Http\Controllers\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Authentications\LoginRequest;
 
-use App\Http\Resources\V1\Users\UserResource;
+use App\Http\Resources\V1\Authentications\AuthResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\isNull;
+
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+
+    }
+
     public function login(LoginRequest $request)
     {
-        $user = User::firstWhere('username', '=', $request->username);
+        $user = User::firstWhere('username',$request->username);
+
         if (!$user) {
             return response()->json([
+                'data' => null,
                 'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
+                    'summary' => 'Usuario no existe',
+                    'detail' => 'Intente de nuevo',
+                    'code' => '404'
                 ]
             ], 404);
         }
+
         if (!Hash::check($request->password, $user->password)) {
             return response()->json([
                 'msg' => [
@@ -35,7 +44,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        return (new UserResource($user))->additional([
+        return (new AuthResource($user))->additional([
             'token' => $user->createToken($request->username)->plainTextToken,
             'msg' => [
                 'summary' => 'success',
@@ -49,7 +58,11 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         return response()->json([
-            'message' => 'logout'
+            'msg' => [
+                'summary' => 'logout',
+                'detail' => '',
+                'code' => '200'
+            ]
         ], 200);
     }
 
@@ -57,7 +70,11 @@ class AuthController extends Controller
     {
         $request->user()->tokens()->delete();
         return response()->json([
-            'message' => 'logoutAll'
+            'msg' => [
+                'summary' => 'logoutAll',
+                'detail' => '',
+                'code' => '200'
+            ]
         ], 200);
     }
 }

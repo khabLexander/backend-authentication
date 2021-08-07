@@ -18,7 +18,6 @@ class CatalogueFactory extends Factory
             'type' => $this->faker->word(),
             'icon' => $this->faker->word(),
             'color' => $this->faker->hexColor(),
-
         ];
     }
 }

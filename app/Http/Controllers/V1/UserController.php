@@ -10,9 +10,19 @@ use App\Http\Resources\V1\Users\UserCollection;
 use App\Http\Resources\V1\Users\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view users', ['only' => ['index', 'show']]);
+        $this->middleware('permission:store users', ['only' => ['store']]);
+        $this->middleware('permission:update users', ['only' => ['update']]);
+        $this->middleware('permission:delete users', ['only' => ['destroy', 'destroys']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -78,7 +88,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user = $user->with('phones');
+        $user = $user;
         return (new UserResource($user))
             ->additional([
                 'msg' => [
@@ -140,7 +150,7 @@ class UserController extends Controller
         $users = User::whereIn('id', $request->input('ids'))->get();
         User::destroy($request->input('ids'));
 
-        return (new UserResource($users))
+        return (new UserCollection($users))
             ->additional([
                 'msg' => [
                     'summary' => 'Usuarios Eliminados',
@@ -150,3 +160,4 @@ class UserController extends Controller
             ]);
     }
 }
+

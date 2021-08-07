@@ -177,6 +177,7 @@ return [
         OwenIt\Auditing\AuditingServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         Laraveles\Spanish\SpanishServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

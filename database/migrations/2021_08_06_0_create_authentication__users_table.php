@@ -18,15 +18,16 @@ class CreateAuthenticationUsersTable extends Migration
             $table->foreignId('identification_type_id')->nullable()->constrained('authentication.catalogues');
             $table->foreignId('sex_id')->nullable()->constrained('authentication.catalogues');
             $table->foreignId('gender_id')->nullable()->constrained('authentication.catalogues');
-            $table->foreignId('ethnic_origin_id')->nullable() ->constrained('authentication.catalogues');
+            $table->foreignId('ethnic_origin_id')->nullable()->constrained('authentication.catalogues');
             $table->foreignId('blood_type_id')->nullable()->constrained('authentication.catalogues');
-            $table->foreignId('civil_status_id') ->nullable()->constrained('authentication.catalogues');
+            $table->foreignId('civil_status_id')->nullable()->constrained('authentication.catalogues');
             $table->string('avatar')->nullable()->unique();
             $table->string('username')->unique();
             $table->string('name');
             $table->string('lastname');
             $table->date('birthdate')->nullable();
             $table->string('email')->unique();
+            $table->string('cellphone')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('password_changed')->default(false);
