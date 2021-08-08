@@ -8,7 +8,7 @@ class CreateAuthenticationSocialmediaTable extends Migration
 {
     public function up()
     {
-        Schema::connection('pgsql-app')->create('socialmedia', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION'))->create('socialmedia', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
             $table->string('icon')->nullable();
@@ -20,6 +20,6 @@ class CreateAuthenticationSocialmediaTable extends Migration
 
     public function down()
     {
-        Schema::connection('pgsql-app')->dropIfExists('socialmedia');
+        Schema::connection(env('DB_CONNECTION'))->dropIfExists('socialmedia');
     }
 }

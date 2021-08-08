@@ -3,7 +3,6 @@
 namespace App\Http\Requests\V1\Files;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Http\Requests\V1\AppFormRequest;
 
 class IndexFileRequest extends FormRequest
 {
@@ -14,14 +13,12 @@ class IndexFileRequest extends FormRequest
 
     public function rules()
     {
-        $rules = [];
-        return AppFormRequest::rules($rules);
+        return [];
     }
 
     public function attributes()
     {
-        $attributes = [
+        return [
         ];
-        return AppFormRequest::attributes($attributes);
     }
 }

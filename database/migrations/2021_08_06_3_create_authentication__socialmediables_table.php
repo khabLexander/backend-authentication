@@ -8,9 +8,9 @@ class CreateAuthenticationSocialmediablesTable extends Migration
 {
     public function up()
     {
-        Schema::connection('pgsql-app')->create('socialmediables', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION'))->create('socialmediables', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('socialmedia_id')->constrained('app.socialmedia');
+            $table->foreignId('socialmedia_id')->constrained('authentication.socialmedia');
             $table->morphs('socialmediables');
             $table->string('user');
             $table->string('url');
@@ -21,6 +21,6 @@ class CreateAuthenticationSocialmediablesTable extends Migration
 
     public function down()
     {
-        Schema::connection('pgsql-app')->dropIfExists('socialmediables');
+        Schema::connection(env('DB_CONNECTION'))->dropIfExists('socialmediables');
     }
 }

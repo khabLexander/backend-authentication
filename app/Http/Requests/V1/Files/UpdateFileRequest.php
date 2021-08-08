@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Requests\App\File;
+namespace App\Http\Requests\V1\Files;
 
-use App\Http\Requests\App\AppFormRequest;
-use App\Http\Requests\JobBoard\JobBoardFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateFileRequest extends FormRequest
@@ -15,19 +13,17 @@ class UpdateFileRequest extends FormRequest
 
     public function rules()
     {
-        $rules = [
+        return [
             'name'=>[
                 'required'
             ],
         ];
-        return AppFormRequest::rules($rules);
     }
 
     public function attributes()
     {
-        $attributes = [
+       return [
             'name' => 'nombre',
         ];
-        return AppFormRequest::attributes($attributes);
     }
 }

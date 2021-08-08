@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Requests\App\Image;
+namespace App\Http\Requests\V1\Images;
 
-use App\Http\Requests\App\AppFormRequest;
-use App\Http\Requests\JobBoard\JobBoardFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateImageRequest extends FormRequest
@@ -15,7 +13,7 @@ class UpdateImageRequest extends FormRequest
 
     public function rules()
     {
-        $rules = [
+        return [
             'image' => [
                 'required',
                 'mimes:jpg,jpeg,png,jpeg 2000,bmp',
@@ -23,24 +21,14 @@ class UpdateImageRequest extends FormRequest
                 'max:102400',
             ],
         ];
-        return AppFormRequest::rules($rules);
-    }
 
-    public function messages()
-    {
-        $messages = [
-            'image.required' => 'El campo :attribute es obligatorio.',
-            'image.mimes' =>'El campo :attribute debe ser un archivo de tipo: :values.',
-            'image.max' => 'El campo :attribute no puede ser mayor que :maxKB.',
-        ];
-        return AppFormRequest::messages($messages);
     }
 
     public function attributes()
     {
-        $attributes = [
+       return [
             'image' => 'imagen'
         ];
-        return JobBoardFormRequest::attributes($attributes);
+
     }
 }

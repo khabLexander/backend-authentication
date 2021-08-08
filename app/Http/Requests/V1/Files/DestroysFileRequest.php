@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\V1\Files;
 
-use App\Http\Requests\V1\AppFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DeleteFileRequest extends FormRequest
+class DestroysFileRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,19 +13,17 @@ class DeleteFileRequest extends FormRequest
 
     public function rules()
     {
-        $rules = [
+        return [
             'ids' => [
                 'required'
             ]
         ];
-        return AppFormRequest::rules($rules);
     }
 
     public function attributes()
     {
-        $attributes = [
+        return [
             'ids' => 'IDs'
         ];
-        return AppFormRequest::attributes($attributes);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Requests\V1\Images;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Http\Requests\V1\AppFormRequest;
 
 class DownloadImageRequest extends FormRequest
 {
@@ -14,19 +13,17 @@ class DownloadImageRequest extends FormRequest
 
     public function rules()
     {
-        $rules = [
+        return [
             'full_path' => [
                 'required',
             ],
         ];
-        return AppFormRequest::rules($rules);
     }
 
     public function attributes()
     {
-        $attributes = [
+       return [
             'full_path' => 'ruta completa',
         ];
-        return AppFormRequest::attributes($attributes);
     }
 }

@@ -3,11 +3,18 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Files\IndexFileRequest;
+use App\Http\Requests\V1\Files\UploadFileRequest;
+use App\Http\Requests\V1\Images\IndexImageRequest;
+use App\Http\Requests\V1\Images\UploadImageRequest;
 use App\Http\Requests\V1\Users\DestroysUserRequest;
+use App\Http\Requests\V1\Users\IndexUserRequest;
 use App\Http\Requests\V1\Users\StoreUserRequest;
 use App\Http\Requests\V1\Users\UpdateUserRequest;
 use App\Http\Resources\V1\Users\UserCollection;
 use App\Http\Resources\V1\Users\UserResource;
+use App\Models\Catalogue;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
@@ -17,10 +24,11 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:view users', ['only' => ['index', 'show']]);
-        $this->middleware('permission:store users', ['only' => ['store']]);
-        $this->middleware('permission:update users', ['only' => ['update']]);
-        $this->middleware('permission:delete users', ['only' => ['destroy', 'destroys']]);
+        $this->middleware('role:admin');
+        $this->middleware('permission:view-users')->only(['index', 'show']);
+        $this->middleware('permission:store-users')->only(['store']);
+        $this->middleware('permission:update-users')->only(['update']);
+        $this->middleware('permission:delete-users')->only(['destroy', 'destroys']);
     }
 
     /**
@@ -28,7 +36,7 @@ class UserController extends Controller
      *
      * @return UserCollection
      */
-    public function index(Request $request)
+    public function index(IndexUserRequest $request)
     {
         $sorts = explode(',', $request->sort);
 
@@ -60,6 +68,13 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $user = new User();
+        $user->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
+        $user->sex()->associate(Catalogue::find($request->input('sex.id')));
+        $user->gender()->associate(Catalogue::find($request->input('gender.id')));
+        $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
+        $user->ethnicOrigin()->associate(Catalogue::find($request->input('ethnicOrigin.id')));
+        $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
+
         $user->username = $request->input('username');
         $user->password = $request->input('password');
         $user->name = $request->input('name');
@@ -67,6 +82,7 @@ class UserController extends Controller
         $user->avatar = $request->input('avatar');
         $user->birthdate = $request->input('birthdate');
         $user->email = $request->input('email');
+        $user->cellphone = $request->input('cellphone');
         $user->save();
 
         return (new UserResource($user))
@@ -88,7 +104,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user = $user;
         return (new UserResource($user))
             ->additional([
                 'msg' => [
@@ -108,12 +123,20 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
+        $user->identificationType()->associate(Catalogue::find($request->input('identificationType.id')));
+        $user->sex()->associate(Catalogue::find($request->input('sex.id')));
+        $user->gender()->associate(Catalogue::find($request->input('gender.id')));
+        $user->bloodType()->associate(Catalogue::find($request->input('bloodType.id')));
+        $user->ethnicOrigin()->associate(Catalogue::find($request->input('ethnicOrigin.id')));
+        $user->civilStatus()->associate(Catalogue::find($request->input('civilStatus.id')));
+
         $user->username = $request->input('username');
         $user->name = $request->input('name');
         $user->lastname = $request->input('lastname');
         $user->avatar = $request->input('avatar');
         $user->birthdate = $request->input('birthdate');
         $user->email = $request->input('email');
+        $user->cellphone = $request->input('cellphone');
         $user->save();
 
         return (new UserResource($user))
@@ -158,6 +181,26 @@ class UserController extends Controller
                     'code' => '201'
                 ]
             ]);
+    }
+
+    public function uploadImages(UploadImageRequest $request)
+    {
+        return (new ImageController())->upload($request, User::find($request->input('id')));
+    }
+
+    public function indexImage(IndexImageRequest $request)
+    {
+        return (new ImageController())->index($request, User::find($request->input('id')));
+    }
+
+    public function uploadFile(UploadFileRequest $request, User $user)
+    {
+        return (new FileController())->upload($request, $user);
+    }
+
+    public function indexFile(IndexFileRequest $request, User $user)
+    {
+        return (new FileController())->index($request, $user);
     }
 }
 

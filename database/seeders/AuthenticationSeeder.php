@@ -89,10 +89,16 @@ class AuthenticationSeeder extends Seeder
 
     private function createPermissions()
     {
-        Permission::create(['name' => 'view users']);
-        Permission::create(['name' => 'store users']);
-        Permission::create(['name' => 'update users']);
-        Permission::create(['name' => 'delete users']);
+        Permission::create(['name' => 'view-users']);
+        Permission::create(['name' => 'store-users']);
+        Permission::create(['name' => 'update-users']);
+        Permission::create(['name' => 'delete-users']);
+
+        Permission::create(['name' => 'download-files']);
+        Permission::create(['name' => 'upload-files']);
+        Permission::create(['name' => 'view-files']);
+        Permission::create(['name' => 'update-files']);
+        Permission::create(['name' => 'delete-files']);
     }
 
     private function assignRolePermissions()

@@ -3,7 +3,6 @@
 namespace App\Http\Requests\V1\Images;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Http\Requests\V1\AppFormRequest;
 
 class IndexImageRequest extends FormRequest
 {
@@ -14,20 +13,18 @@ class IndexImageRequest extends FormRequest
 
     public function rules()
     {
-        $rules = [
+        return [
             'id' => [
                 'required',
                 'integer',
             ],
         ];
-        return AppFormRequest::rules($rules);
     }
 
     public function attributes()
     {
-        $attributes = [
+       return [
             'id' => 'ID',
         ];
-        return AppFormRequest::attributes($attributes);
     }
 }

@@ -59,6 +59,16 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
     ];
 
     // Relationships
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
     public function phones()
     {
         return $this->morphMany(Phone::class, 'phoneable');

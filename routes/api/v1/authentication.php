@@ -4,20 +4,26 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\V1\UserController;
 use App\Http\Controllers\V1\AuthController;
-
-
-Route::apiResource('users', UserController::class);
-
-Route::prefix('user')->group(function () {
-    Route::patch('destroys', [UserController::class, 'destroys']);
-});
+use App\Http\Controllers\V1\RoleController;
+use App\Http\Controllers\V1\PermissionController;
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login'])->withoutMiddleware(['auth:sanctum']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('logout-all', [AuthController::class, 'logoutAll']);
+});
+
+Route::prefix('role/{role}')->group(function () {
+    Route::post('give-permissions', [RoleController::class, 'givePermissions']);
+    Route::post('sync-permissions', [RoleController::class, 'syncPermissions']);
+    Route::patch('revoke-permissions', [RoleController::class, 'revokePermissions']);
+});
+
+Route::prefix('permission/{permission}')->group(function () {
+    Route::post('assign-roles', [PermissionController::class, 'assignRoles']);
+    Route::post('sync-roles', [PermissionController::class, 'syncRoles']);
+    Route::patch('remove-roles', [PermissionController::class, 'removeRoles']);
 });
 
 Route::get('init', function () {

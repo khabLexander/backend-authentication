@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\App\Image\DownloadImageRequest;
-use App\Http\Requests\App\Image\IndexImageRequest;
-
+use App\Http\Requests\V1\Images\DownloadImageRequest;
+use App\Http\Requests\V1\Images\IndexImageRequest;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image as InterventionImage;
-use App\Http\Requests\App\Image\UpdateImageRequest;
-use App\Http\Requests\App\Image\UploadImageRequest;
+use App\Http\Requests\V1\Images\UpdateImageRequest;
+use App\Http\Requests\V1\Images\UploadImageRequest;
 use App\Models\Image;
 
 class ImageController extends Controller
@@ -24,16 +23,17 @@ class ImageController extends Controller
     public function download(DownloadImageRequest $request)
     {
         $path = $request->input('full_path');
-        if (Storage::exists($path)) {
-            return Storage::download($path);
+        if (!Storage::exists($path)) {
+            return response()->json([
+                'data' => null,
+                'msg' => [
+                    'summary' => 'Imagen no encontrada',
+                    'detail' => 'Intente de nuevo',
+                    'code' => '404'
+                ]], 404);
         }
-        return response()->json([
-            'data' => null,
-            'msg' => [
-                'summary' => 'Imagen no encontrada',
-                'detail' => 'Intente de nuevo',
-                'code' => '404'
-            ]], 404);
+
+        return Storage::download($path);
     }
 
     public function upload(UploadImageRequest $request, $model)

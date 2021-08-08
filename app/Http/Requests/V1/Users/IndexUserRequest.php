@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\V1\Authentications;
-
+namespace App\Http\Requests\V1\Users;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class IndexUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,20 +24,14 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required',
-            'password' => ['required'],
-            'device_name' => ['required', 'max:100'],
+
         ];
-        return AppFormRequest::attributes($rules);
     }
 
     public function attributes()
     {
-       return [
-            'username' => 'nombre de usuario',
-            'password' => 'contraseña',
-            'device_name' => 'nombre del dispositivo',
-        ];
+        return [
 
+        ];
     }
 }

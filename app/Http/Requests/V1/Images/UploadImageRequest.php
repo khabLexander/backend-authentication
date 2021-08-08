@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\V1\Images;
 
-use App\Http\Requests\V1\AppFormRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UploadImageRequest extends FormRequest
@@ -14,7 +13,7 @@ class UploadImageRequest extends FormRequest
 
     public function rules()
     {
-        $rules = [
+        return [
             'images.*' => [
                 'required',
                 'mimes:jpg,jpeg,png,jpeg 2000,bmp',
@@ -22,14 +21,12 @@ class UploadImageRequest extends FormRequest
                 'max:102400',
             ],
         ];
-        return AppFormRequest::rules($rules);
     }
 
     public function attributes()
     {
-        $attributes = [
+        return [
             'images.*' => 'imagen'
         ];
-        return AppFormRequest::attributes($attributes);
     }
 }

@@ -16,12 +16,11 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-
     }
 
     public function login(LoginRequest $request)
     {
-        $user = User::firstWhere('username',$request->username);
+        $user = User::firstWhere('username', $request->username);
 
         if (!$user) {
             return response()->json([
@@ -45,7 +44,7 @@ class AuthController extends Controller
         }
 
         return (new AuthResource($user))->additional([
-            'token' => $user->createToken($request->username)->plainTextToken,
+            'token' => $user->createToken($request->getClientIp())->plainTextToken,
             'msg' => [
                 'summary' => 'success',
                 'detail' => '',

@@ -8,7 +8,7 @@ class CreateAuthenticationFilesTable extends Migration
 {
     public function up()
     {
-        Schema::connection('pgsql-app')->create('files', function (Blueprint $table) {
+        Schema::connection(env('DB_CONNECTION'))->create('files', function (Blueprint $table) {
             $table->id();
             $table->morphs('fileable');
             $table->string('name');
@@ -22,6 +22,6 @@ class CreateAuthenticationFilesTable extends Migration
 
     public function down()
     {
-        Schema::connection('pgsql-app')->dropIfExists('files');
+        Schema::connection(env('DB_CONNECTION'))->dropIfExists('files');
     }
 }

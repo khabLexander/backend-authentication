@@ -31,15 +31,6 @@ class Catalogue extends Model implements Auditable
 
     protected $hidden = ['created_at', 'updated_at','deleted_at'];
 
-    // Instance
-    public static function getInstance($id)
-    {
-        if (is_null(static::$instance)) {
-            static::$instance = new static;
-        }
-        static::$instance->id = $id;
-        return static::$instance;
-    }
 
     // Relationsships
     public function parent()
