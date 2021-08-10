@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Exceptions\ExampleException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\V1\Files\IndexFileRequest;
 use App\Http\Requests\V1\Files\UploadFileRequest;
