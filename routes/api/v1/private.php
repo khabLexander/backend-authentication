@@ -14,7 +14,7 @@ Route::prefix('user')->group(function () {
 
 Route::prefix('user/{user}')->group(function () {
     Route::prefix('file')->group(function () {
-        Route::get('', [UserController::class, 'indexFile']);
+        Route::get('', [UserController::class, 'indexFiles']);
         Route::post('', [UserController::class, 'uploadFile']);
     });
 });

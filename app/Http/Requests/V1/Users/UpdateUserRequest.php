@@ -24,6 +24,7 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
+            'identificationType' => ['required'],
             'username' => ['required', 'max:50'],
             'name' => ['required', 'min:2', 'max:100'],
             'lastname' => ['required', 'min:2', 'max:50'],
@@ -34,6 +35,7 @@ class UpdateUserRequest extends FormRequest
     public function attributes()
     {
         return [
+            'identificationType' => 'tipo de documento',
             'username' => 'nombre de usuario',
             'name' => 'nombre',
             'lastname' => 'apellido',

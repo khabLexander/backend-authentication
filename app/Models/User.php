@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Traits\EmailTrait;
+use App\Traits\FileTrait;
+use App\Traits\PhoneTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,8 +24,14 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
     use HasApiTokens;
     use SoftDeletes;
     use HasRoles;
+    use PhoneTrait;
+    use EmailTrait;
+    use FileTrait;
 
-    const ATTEMPTS = 3;
+    const MAX_ATTEMPTS = 3;
+    const DECAY_MINUTES_PASSWORD_FORGOT = 10;
+    const DECAY_MINUTES_USER_UNLOCK = 10;
+    const DECAY_MINUTES_TRANSACTIONAL_CODE = 2;
     /**
      * The attributes that are mass assignable.
      *
@@ -37,6 +46,7 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
         'email',
         'email_verified_at',
         'password_changed',
+        'max_attempts',
     ];
 
     /**

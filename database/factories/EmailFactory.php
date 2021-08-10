@@ -23,6 +23,8 @@ class EmailFactory extends Factory
     {
         return [
             'email'=>$this->faker->safeEmail(),
+            'domain'=>$this->faker->domainName(),
+            'icon'=>$this->faker->word(),
         ];
     }
 }

@@ -22,7 +22,6 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'lastname' => $this->lastname,
             'email' => $this->email,
-            'cellphone' => $this->cellphone,
             'birthdate' => $this->birthdate,
             'emails' => EmailResource::collection($this->emails),
             'phones' => PhoneResource::collection($this->phones),

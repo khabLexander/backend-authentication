@@ -18,8 +18,9 @@ class CreateAuthenticationPhonesTable extends Migration
             $table->morphs('phoneable');
             $table->foreignId('operator_id')->nullable()->constrained('authentication.catalogues');
             $table->foreignId('type_id')->nullable()->constrained('authentication.catalogues');
-            $table->foreignId('area_code_id')->nullable()->constrained('authentication.catalogues');
+            $table->foreignId('location_id')->nullable()->constrained('authentication.locations');
             $table->string('number');
+            $table->boolean('main');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -23,6 +23,7 @@ class PhoneFactory extends Factory
     {
         return [
            'number'=>$this->faker->phoneNumber(),
+           'main'=>$this->faker->boolean(),
         ];
     }
 }

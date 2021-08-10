@@ -31,8 +31,6 @@ class File extends Model implements Auditable
         'directory',
     ];
 
-    protected $hidden = ['fileable_type'];
-
     // Relationships
     public function fileable()
     {

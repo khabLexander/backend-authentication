@@ -14,11 +14,8 @@ use App\Http\Requests\V1\Users\UpdateUserRequest;
 use App\Http\Resources\V1\Users\UserCollection;
 use App\Http\Resources\V1\Users\UserResource;
 use App\Models\Catalogue;
-use App\Models\Image;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -79,11 +76,13 @@ class UserController extends Controller
         $user->password = $request->input('password');
         $user->name = $request->input('name');
         $user->lastname = $request->input('lastname');
-        $user->avatar = $request->input('avatar');
         $user->birthdate = $request->input('birthdate');
         $user->email = $request->input('email');
-        $user->cellphone = $request->input('cellphone');
-        $user->save();
+        DB::transaction(function () use ($request, $user) {
+            $user->save();
+            $user->addPhones($request->input('phones'));
+            $user->addEmails($request->input('emails'));
+        });
 
         return (new UserResource($user))
             ->additional([
@@ -93,7 +92,6 @@ class UserController extends Controller
                     'code' => '200'
                 ]
             ]);
-
     }
 
     /**
@@ -133,11 +131,12 @@ class UserController extends Controller
         $user->username = $request->input('username');
         $user->name = $request->input('name');
         $user->lastname = $request->input('lastname');
-        $user->avatar = $request->input('avatar');
         $user->birthdate = $request->input('birthdate');
         $user->email = $request->input('email');
-        $user->cellphone = $request->input('cellphone');
+
         $user->save();
+        $user->addPhones($request->input('phones'));
+        $user->addEmails($request->input('emails'));
 
         return (new UserResource($user))
             ->additional([
@@ -195,12 +194,12 @@ class UserController extends Controller
 
     public function uploadFile(UploadFileRequest $request, User $user)
     {
-        return (new FileController())->upload($request, $user);
+        return $user->uploadFile($request);
     }
 
-    public function indexFile(IndexFileRequest $request, User $user)
+    public function indexFiles(IndexFileRequest $request, User $user)
     {
-        return (new FileController())->index($request, $user);
+        return $user->indexFiles($request);
     }
 }
 

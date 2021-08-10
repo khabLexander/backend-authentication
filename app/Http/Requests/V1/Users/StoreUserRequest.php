@@ -38,8 +38,8 @@ class StoreUserRequest extends FormRequest
         return [
             'identificationType' => 'tipo de documento',
             'username' => 'nombre de usuario',
-            'name' => 'nombre',
-            'lastname' => 'apellido',
+            'name' => 'nombres',
+            'lastname' => 'apellidos',
             'email' => 'correo electrónico',
             'password' => 'contraseña',
         ];

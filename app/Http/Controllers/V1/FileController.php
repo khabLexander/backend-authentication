@@ -42,50 +42,6 @@ class FileController extends Controller
         return Storage::download($file->full_path);
     }
 
-    public function upload(UploadFileRequest $request, $model)
-    {
-        if ($request->file('file')) {
-            $this->save($request, $request->file('file'), $model);
-        }
-
-        if ($request->file('files')) {
-            foreach ($request->file('files') as $file) {
-                $this->save($request, $file, $model);
-            }
-        }
-
-        return (new FileCollection([]))->additional(
-            [
-                'msg' => [
-                    'summary' => 'Archivo(s) subido(s)',
-                    'detail' => 'Su petición se procesó correctamente',
-                    'code' => '201'
-                ]
-            ]);
-    }
-
-    public function index(IndexFileRequest $request, $model)
-    {
-        if ($request->has('page') && $request->has('per_page')) {
-            $files = $model->files()->paginate($request->input('per_page'));
-
-        } else {
-            $files = $model->files()
-                ->description($request->input('description'))
-                ->name($request->input('name'))
-                ->paginate($request->input('per_page'));
-        }
-
-        return (new FileCollection($files))->additional(
-            [
-                'msg' => [
-                    'summary' => 'success',
-                    'detail' => '',
-                    'code' => '200'
-                ]
-            ]);
-    }
-
     public function show(File $file)
     {
         return (new FileResource($file))->additional(
@@ -181,24 +137,5 @@ class FileController extends Controller
                     'code' => '201'
                 ]
             ]);
-    }
-
-    private function save($request, $file, $model)
-    {
-        $newFile = new File();
-        $newFile->name = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $newFile->description = $request->input('description');
-        $newFile->extension = $file->getClientOriginalExtension();
-        $newFile->fileable()->associate($model);
-        $newFile->save();
-
-        $file->storeAs(
-            'files',
-            $newFile->full_path,
-            'private'
-        );
-
-        $newFile->directory = 'files';
-        $newFile->save();
     }
 }

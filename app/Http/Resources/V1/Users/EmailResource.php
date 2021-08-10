@@ -18,7 +18,8 @@ class EmailResource extends JsonResource
         return [
             'id' => $this->id,
             'email' => $this->email,
-            'main' => $this->main,
+            'domain' => $this->domain,
+            'icon' => $this->icon,
         ];
     }
 }

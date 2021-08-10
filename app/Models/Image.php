@@ -22,9 +22,6 @@ class Image extends Model implements Auditable
     use Auditing;
     use SoftDeletes;
 
-    protected static $instance;
-
-    protected $connection = 'pgsql-app';
     protected $table = 'authentication.images';
 
     protected $fillable = [
@@ -33,20 +30,6 @@ class Image extends Model implements Auditable
         'extension',
         'directory',
     ];
-
-    protected $hidden = ['imageable_type'];
-
-    protected $appends = ['full_name', 'full_path'];
-
-    // Instance
-    public static function getInstance($id)
-    {
-        if (is_null(static::$instance)) {
-            static::$instance = new static;
-        }
-        static::$instance->id = $id;
-        return static::$instance;
-    }
 
     // Relationships
     public function imageable()

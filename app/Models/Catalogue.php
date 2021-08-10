@@ -16,11 +16,7 @@ class Catalogue extends Model implements Auditable
     use Auditing;
     use SoftDeletes;
 
-    protected static $instance;
-
-    protected $connection = 'pgsql-app';
     protected $table = 'authentication.catalogues';
-
 
     protected $fillable = [
         'code',
@@ -28,9 +24,6 @@ class Catalogue extends Model implements Auditable
         'type',
         'icon',
     ];
-
-    protected $hidden = ['created_at', 'updated_at','deleted_at'];
-
 
     // Relationsships
     public function parent()
