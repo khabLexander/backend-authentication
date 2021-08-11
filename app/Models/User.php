@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\EmailTrait;
 use App\Traits\FileTrait;
+use App\Traits\ImageTrait;
 use App\Traits\PhoneTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,6 +28,7 @@ class User extends Authenticatable implements Auditable, MustVerifyEmail
     use PhoneTrait;
     use EmailTrait;
     use FileTrait;
+    use ImageTrait;
 
     const MAX_ATTEMPTS = 3;
     const DECAY_MINUTES_PASSWORD_FORGOT = 10;

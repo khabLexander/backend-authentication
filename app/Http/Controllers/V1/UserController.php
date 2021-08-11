@@ -19,6 +19,7 @@ use App\Http\Resources\V1\Users\UserCollection;
 use App\Http\Resources\V1\Users\UserResource;
 use App\Models\Catalogue;
 use App\Models\File;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -184,9 +185,9 @@ class UserController extends Controller
     }
 
     // Images
-    public function uploadImages(UploadImageRequest $request)
+    public function uploadImage(UploadImageRequest $request, User $user)
     {
-        return (new ImageController())->upload($request, User::find($request->input('id')));
+        return $user->uploadImage($request);
     }
 
     public function indexImage(IndexImageRequest $request)
@@ -205,27 +206,27 @@ class UserController extends Controller
         return $user->uploadFile($request);
     }
 
-    public function downloadFile(User $user,File $file)
+    public function downloadFile(User $user, File $file)
     {
         return $user->downloadFile($file);
     }
 
-    public function showFile(User $user,File $file)
+    public function showFile(User $user, File $file)
     {
         return $user->showFile($file);
     }
 
-    public function updateFile(UpdateFileRequest $request,User $user, File $file)
+    public function updateFile(UpdateFileRequest $request, User $user, File $file)
     {
         return $user->updateFile($request, $file);
     }
 
-    public function destroyFile(User $user,File $file)
+    public function destroyFile(User $user, File $file)
     {
         return $user->destroyFile($file);
     }
 
-    public function destroyFiles(User $user,DestroysFileRequest $request)
+    public function destroyFiles(User $user, DestroysFileRequest $request)
     {
         return $user->destroyFiles($request);
     }

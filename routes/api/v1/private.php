@@ -22,6 +22,15 @@ Route::prefix('user/{user}')->group(function () {
         Route::delete('{file}', [UserController::class, 'destroyFile']);
         Route::patch('', [UserController::class, 'destroyFiles']);
     });
+    Route::prefix('image')->group(function () {
+        Route::get('{image}/download', [UserController::class, 'downloadImage']);
+        Route::get('', [UserController::class, 'indexImages']);
+        Route::get('{image}', [UserController::class, 'showImage']);
+        Route::post('', [UserController::class, 'uploadImage']);
+        Route::put('{image}', [UserController::class, 'updateImage']);
+        Route::delete('{image}', [UserController::class, 'destroyImage']);
+        Route::patch('', [UserController::class, 'destroyImages']);
+    });
 });
 
 Route::prefix('file')->group(function () {
