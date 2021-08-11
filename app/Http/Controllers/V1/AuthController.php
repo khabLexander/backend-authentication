@@ -46,8 +46,8 @@ class AuthController extends Controller
         return (new AuthResource($user))->additional([
             'token' => $user->createToken($request->getClientIp())->plainTextToken,
             'msg' => [
-                'summary' => 'success',
-                'detail' => '',
+                'summary' => 'Acceso correcto',
+                'detail' => 'Bienvenido',
                 'code' => '200'
             ]
         ]);

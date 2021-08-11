@@ -48,22 +48,10 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        return parent::render($request, $e);
-        if ($e instanceof ModelNotFound || $e instanceof ExampleException) {
-            return ExampleException::render($request, $e);
-        }
-        if ($e instanceof NotFoundHttpException) {
-//            return ModelNotFound::render($request);
-            return response()->json([
-                'msg' => [
-                    'summary' => 'El registro del modelo no se encontró',
-                    'detail' => '',
-                    'code' => '500',
-                ]
-            ], 404);
-        }
+//        return parent::render($request, $e);
 
         return response()->json([
+            'data' => $e->getMessage(),
             'msg' => [
                 'summary' => 'Error en el servidor',
                 'detail' => '',

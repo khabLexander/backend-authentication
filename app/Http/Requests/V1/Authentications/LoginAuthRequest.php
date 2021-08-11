@@ -26,10 +26,9 @@ class LoginAuthRequest extends FormRequest
     {
         return [
             'username' => 'required',
-            'password' => ['required'],
-            'device_name' => ['required', 'max:100'],
+            'pasword' => ['required'],
+            'deviceName' => ['required', 'max:100'],
         ];
-        return AppFormRequest::attributes($rules);
     }
 
     public function attributes()
@@ -37,8 +36,7 @@ class LoginAuthRequest extends FormRequest
        return [
             'username' => 'nombre de usuario',
             'password' => 'contraseña',
-            'device_name' => 'nombre del dispositivo',
+            'deviceName' => 'nombre del dispositivo',
         ];
-
     }
 }
