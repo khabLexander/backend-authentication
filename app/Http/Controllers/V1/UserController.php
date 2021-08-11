@@ -27,7 +27,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:guest');
+        $this->middleware('role:admin');
         $this->middleware('permission:view-users')->only(['index', 'show']);
         $this->middleware('permission:store-users')->only(['store']);
         $this->middleware('permission:update-users')->only(['update']);
