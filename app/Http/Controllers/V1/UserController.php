@@ -4,7 +4,10 @@ namespace App\Http\Controllers\V1;
 
 use App\Exceptions\ExampleException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\Files\DestroysFileRequest;
+use App\Http\Requests\V1\Files\DownloadFileRequest;
 use App\Http\Requests\V1\Files\IndexFileRequest;
+use App\Http\Requests\V1\Files\UpdateFileRequest;
 use App\Http\Requests\V1\Files\UploadFileRequest;
 use App\Http\Requests\V1\Images\IndexImageRequest;
 use App\Http\Requests\V1\Images\UploadImageRequest;
@@ -15,6 +18,7 @@ use App\Http\Requests\V1\Users\UpdateUserRequest;
 use App\Http\Resources\V1\Users\UserCollection;
 use App\Http\Resources\V1\Users\UserResource;
 use App\Models\Catalogue;
+use App\Models\File;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -38,15 +42,11 @@ class UserController extends Controller
     {
         $sorts = explode(',', $request->sort);
 
-        if ($request->has('page') && $request->has('per_page')) {
-            $users = User::customOrderBy($sorts)
-                ->paginate($request->input('per_page'));
-        } else {
-            $users = User::customOrderBy($sorts)
-                ->name($request->input('name'))
-                ->lastname($request->input('lastname'))
-                ->paginate();
-        }
+        $users = User::customOrderBy($sorts)
+            ->name($request->input('name'))
+            ->lastname($request->input('lastname'))
+            ->paginate();
+
         return (new UserCollection($users))
             ->additional([
                 'msg' => [
@@ -110,7 +110,7 @@ class UserController extends Controller
                     'detail' => '',
                     'code' => '200'
                 ]
-            ]);;
+            ]);
     }
 
     /**
@@ -193,14 +193,41 @@ class UserController extends Controller
         return (new ImageController())->index($request, User::find($request->input('id')));
     }
 
+    public function indexFiles(IndexFileRequest $request, User $user)
+    {
+        return $user->indexFiles($request);
+    }
+
     public function uploadFile(UploadFileRequest $request, User $user)
     {
         return $user->uploadFile($request);
     }
 
-    public function indexFiles(IndexFileRequest $request, User $user)
+    public function downloadFile(User $user,File $file)
     {
-        return $user->indexFiles($request);
+        return $user->downloadFile($file);
     }
+
+    public function showFile(User $user,File $file)
+    {
+        return $user->showFile($file);
+    }
+
+    public function updateFile(UpdateFileRequest $request,User $user, File $file)
+    {
+        return $user->updateFile($request, $file);
+    }
+
+    public function destroyFile(User $user,File $file)
+    {
+        return $user->destroyFile($file);
+    }
+
+    public function destroyFiles(User $user,DestroysFileRequest $request)
+    {
+        return $user->destroyFiles($request);
+    }
+
+
 }
 

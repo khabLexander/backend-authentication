@@ -128,7 +128,7 @@ trait FileTrait
         }
     }
 
-    public function destroysFiles(DestroysFileRequest $request)
+    public function destroyFiles(DestroysFileRequest $request)
     {
         foreach ($request->input('ids') as $id) {
             $file = File::find($id);
