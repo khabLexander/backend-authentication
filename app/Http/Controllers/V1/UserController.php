@@ -183,6 +183,7 @@ class UserController extends Controller
             ]);
     }
 
+    // Images
     public function uploadImages(UploadImageRequest $request)
     {
         return (new ImageController())->upload($request, User::find($request->input('id')));
@@ -193,6 +194,7 @@ class UserController extends Controller
         return (new ImageController())->index($request, User::find($request->input('id')));
     }
 
+    // Files
     public function indexFiles(IndexFileRequest $request, User $user)
     {
         return $user->indexFiles($request);
@@ -227,7 +229,5 @@ class UserController extends Controller
     {
         return $user->destroyFiles($request);
     }
-
-
 }
 
