@@ -100,6 +100,51 @@ class AuthenticationSeeder extends Seeder
         Permission::create(['name' => 'update-users']);
         Permission::create(['name' => 'delete-users']);
 
+        Permission::create(['name' => 'view-categories']);
+        Permission::create(['name' => 'store-categories']);
+        Permission::create(['name' => 'update-categories']);
+        Permission::create(['name' => 'delete-categories']);
+
+        Permission::create(['name' => 'view-enterprises']);
+        Permission::create(['name' => 'store-enterprises']);
+        Permission::create(['name' => 'update-enterprises']);
+        Permission::create(['name' => 'delete-enterprises']);
+
+        Permission::create(['name' => 'view-products']);
+        Permission::create(['name' => 'store-products']);
+        Permission::create(['name' => 'update-products']);
+        Permission::create(['name' => 'delete-products']);
+
+        Permission::create(['name' => 'view-clients']);
+        Permission::create(['name' => 'store-clients']);
+        Permission::create(['name' => 'update-clients']);
+        Permission::create(['name' => 'delete-clients']);
+
+        Permission::create(['name' => 'view-deliveries']);
+        Permission::create(['name' => 'store-deliveries']);
+        Permission::create(['name' => 'update-deliveries']);
+        Permission::create(['name' => 'delete-deliveries']);
+
+        Permission::create(['name' => 'view-favorites']);
+        Permission::create(['name' => 'store-favorites']);
+        Permission::create(['name' => 'update-favorites']);
+        Permission::create(['name' => 'delete-favorites']);
+
+        Permission::create(['name' => 'view-order-details']);
+        Permission::create(['name' => 'store-order-details']);
+        Permission::create(['name' => 'update-order-details']);
+        Permission::create(['name' => 'delete-order-details']);
+
+        Permission::create(['name' => 'view-enterprise-categories']);
+        Permission::create(['name' => 'store-enterprise-categories']);
+        Permission::create(['name' => 'update-enterprise-categories']);
+        Permission::create(['name' => 'delete-enterprise-categories']);
+
+        Permission::create(['name' => 'view-orders']);
+        Permission::create(['name' => 'store-orders']);
+        Permission::create(['name' => 'update-orders']);
+        Permission::create(['name' => 'delete-orders']);
+
         Permission::create(['name' => 'download-files']);
         Permission::create(['name' => 'upload-files']);
         Permission::create(['name' => 'view-files']);
@@ -111,10 +156,32 @@ class AuthenticationSeeder extends Seeder
     {
         $role = Role::firstWhere('name', 'admin');
         $role->syncPermissions(Permission::get());
+
         $role = Role::firstWhere('name', 'client');
-        $role->syncPermissions(Permission::get());
+        $role->givePermissionTo([
+            'view-categories',
+            'view-enterprises',
+            'view-products',
+            'view-favorites',
+            'store-favorites',
+            'update-favorites',
+            'delete-favorites',
+            'view-order-details',
+            'store-order-details',
+            'delete-order-details',
+            'view-enterprise-categories',
+            'view-orders',
+            'store-orders',
+            'upload-files'
+        ]);
         $role = Role::firstWhere('name', 'delivery');
-        $role->syncPermissions(Permission::get());
+        $role->givePermissionTo([
+            'view-enterprises',
+            'view-products',
+            'view-deliveries',
+            'view-orders',
+            'upload-files'
+        ]);
     }
 
     private function assignUserRoles()
