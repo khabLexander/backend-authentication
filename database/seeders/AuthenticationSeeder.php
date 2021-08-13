@@ -38,7 +38,6 @@ class AuthenticationSeeder extends Seeder
         $this->createPermissions();
         $this->assignRolePermissions();
         $this->assignUserRoles();
-
     }
 
     private function createUsers()
@@ -70,7 +69,7 @@ class AuthenticationSeeder extends Seeder
                 ]
             );
         Email::factory(2)->for($userFactory, 'emailable')->create();
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 151; $i++) {
             $userFactory = User::factory()
                 ->create([
                     'identification_type_id' => $identificationTypes[rand(0, $identificationTypes->count() - 1)],
@@ -90,6 +89,8 @@ class AuthenticationSeeder extends Seeder
     {
         Role::create(['name' => 'admin']);
         Role::create(['name' => 'guest']);
+        Role::create(['name' => 'client']);
+        Role::create(['name' => 'delivery']);
     }
 
     private function createPermissions()
@@ -110,12 +111,26 @@ class AuthenticationSeeder extends Seeder
     {
         $role = Role::firstWhere('name', 'admin');
         $role->syncPermissions(Permission::get());
+        $role = Role::firstWhere('name', 'client');
+        $role->syncPermissions(Permission::get());
+        $role = Role::firstWhere('name', 'delivery');
+        $role->syncPermissions(Permission::get());
     }
 
     private function assignUserRoles()
     {
-        $user = User::find(1);
-        $user->assignRole('admin');
+
+        for ($i = 1; $i <= 151; $i++) {
+            $user = User::find($i);
+            if ($i == 1)
+                $user->assignRole('admin');
+            if ($i > 1 && $i <= 101)
+                $user->assignRole('client');
+            if ($i > 101 && $i <= 151)
+                $user->assignRole('delivery');
+            if ($i == 152)
+                $user->assignRole('guest');
+        }
     }
 
     private function createLocationCatalogues()
@@ -657,10 +672,12 @@ class AuthenticationSeeder extends Seeder
             ],
             [
                 'code' => $catalogues['catalogue']['identification_type']['passport'],
-                'name' => 'PASAPORTE', 'type' => $catalogues['catalogue']['identification_type']['type']],
+                'name' => 'PASAPORTE', 'type' => $catalogues['catalogue']['identification_type']['type']
+            ],
             [
                 'code' => $catalogues['catalogue']['identification_type']['ruc'],
-                'name' => 'RUC', 'type' => $catalogues['catalogue']['identification_type']['type']],
+                'name' => 'RUC', 'type' => $catalogues['catalogue']['identification_type']['type']
+            ],
         )->create();
     }
 
